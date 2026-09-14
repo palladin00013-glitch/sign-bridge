@@ -52,6 +52,9 @@
 
 body {
   margin: 0;
+  background: linear-gradient(180deg, #EAF4FF 0%, #FFFDF5 100%);
+  min-height: 100vh;
+  color: #16233F;
 }
 
 #root {

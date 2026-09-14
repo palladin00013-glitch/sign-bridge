@@ -4,10 +4,11 @@ import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
+import { theme } from './theme'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <MantineProvider defaultColorScheme="light">
+    <MantineProvider theme={theme}>
       <App />
     </MantineProvider>
   </StrictMode>,

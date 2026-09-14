@@ -21,7 +21,7 @@ function poseAt(keyframes, elapsedMs) {
 
 const EMOTION_COLOR = { neutral: '#1e88e5', urgent: '#e53935', happy: '#43a047' }
 
-export default function AvatarPlayer({ keyframes, label, emotion = 'neutral' }) {
+export default function AvatarPlayer({ keyframes, label, emotion = 'neutral', speed = 1, size = 220 }) {
   const [pose, setPose] = useState(() => poseAt(keyframes, 0))
   const startRef = useRef(null)
   const rafRef = useRef(null)
@@ -30,14 +30,14 @@ export default function AvatarPlayer({ keyframes, label, emotion = 'neutral' }) 
     startRef.current = null
     function tick(ts) {
       if (startRef.current === null) startRef.current = ts
-      const elapsed = ts - startRef.current
+      const elapsed = (ts - startRef.current) * speed
       const p = poseAt(keyframes, elapsed)
       setPose(p)
       if (!p.done) rafRef.current = requestAnimationFrame(tick)
     }
     rafRef.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [keyframes])
+  }, [keyframes, speed])
 
   const color = EMOTION_COLOR[emotion] || EMOTION_COLOR.neutral
   const [lx, ly] = pose.left
@@ -45,7 +45,7 @@ export default function AvatarPlayer({ keyframes, label, emotion = 'neutral' }) 
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <svg viewBox="0 0 200 260" width={220} height={286}>
+      <svg viewBox="0 0 200 260" width={size} height={size * (286 / 220)}>
         {/* head */}
         <circle cx="100" cy="45" r="28" fill="#f2c9a0" stroke="#333" strokeWidth="2" />
         {/* eyebrows shift slightly for 'urgent' to read as more alert */}
