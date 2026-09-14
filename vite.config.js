@@ -8,8 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,mp4}'],
-        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // videos are heavy
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,mp4,wasm,data,tflite,binarypb}'],
+        maximumFileSizeToCacheInBytes: 32 * 1024 * 1024, // MediaPipe models and videos are heavy
         runtimeCaching: [
           {
             urlPattern: /\/videos\/.*\.mp4$/,

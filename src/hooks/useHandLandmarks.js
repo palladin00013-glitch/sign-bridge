@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Hands } from '@mediapipe/hands'
-import { Camera } from '@mediapipe/camera_utils'
+import '@mediapipe/hands'
+import '@mediapipe/camera_utils'
+
+const { Hands, Camera } = globalThis
 
 export function useHandLandmarks(videoRef, onLandmarks) {
   const handsRef = useRef(null)

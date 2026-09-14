@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Holistic } from '@mediapipe/holistic'
+import '@mediapipe/holistic'
 import { landmarksToVector, classifySign } from '../lib/signClassifier'
+
+const { Holistic } = globalThis
 
 function makeCroppedCanvas(video, side) {
   const canvas = document.createElement('canvas')
