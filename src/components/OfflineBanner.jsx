@@ -18,7 +18,7 @@ export default function OfflineBanner() {
   if (online) return null
 
   return (
-    <div role="status" style={{ marginBottom: 16, padding: 8, background: '#fff3cd' }}>
+    <div role="status" className="mb-4 bg-tertiary-container px-3 py-2 text-sm text-on-tertiary-container">
       You are offline. SignBridge is using cached resources.
     </div>
   )

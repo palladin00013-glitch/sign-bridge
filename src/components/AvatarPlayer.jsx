@@ -40,12 +40,13 @@ export default function AvatarPlayer({ keyframes, label, emotion = 'neutral', sp
   }, [keyframes, speed])
 
   const color = EMOTION_COLOR[emotion] || EMOTION_COLOR.neutral
+  const width = typeof size === 'number' ? size : { small: 160, medium: 220, large: 280 }[size] || 220
   const [lx, ly] = pose.left
   const [rx, ry] = pose.right
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <svg viewBox="0 0 200 260" width={size} height={size * (286 / 220)}>
+      <svg viewBox="0 0 200 260" width={width} height={width * (286 / 220)}>
         {/* head */}
         <circle cx="100" cy="45" r="28" fill="#f2c9a0" stroke="#333" strokeWidth="2" />
         {/* eyebrows shift slightly for 'urgent' to read as more alert */}

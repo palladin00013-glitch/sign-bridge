@@ -1,75 +1,8 @@
-import { useEffect, useState } from 'react'
-import { ActionIcon, Group, Title, Stack, Text, Switch, SegmentedControl, Card, Badge } from '@mantine/core'
-import { ArrowLeft, Wifi } from 'lucide-react'
-import { getSettings, saveSettings } from '../lib/settingsStore'
+import Icon from './Icon'
+import { saveSettings } from '../lib/settingsStore'
 
-export default function SettingsScreen({ onBack }) {
-  const [settings, setSettings] = useState(null)
-
-  useEffect(() => {
-    getSettings().then(setSettings)
-  }, [])
-
-  function update(patch) {
-    const next = { ...settings, ...patch }
-    setSettings(next)
-    saveSettings(next)
-  }
-
-  if (!settings) return null
-
-  return (
-    <div style={{ padding: 20 }}>
-      <Group mb={16}>
-        <ActionIcon variant="subtle" onClick={onBack} aria-label="Back">
-          <ArrowLeft size={18} />
-        </ActionIcon>
-        <Title order={3}>Your Controls</Title>
-      </Group>
-
-      <Text fw={600} size="sm" c="dimmed" mb={8}>AVATAR SETTINGS</Text>
-      <Stack gap="md" mb={20}>
-        <Group justify="space-between">
-          <Text>Sign Speed</Text>
-          <SegmentedControl
-            size="xs"
-            value={settings.avatarSpeed}
-            onChange={value => update({ avatarSpeed: value })}
-            data={['slow', 'normal', 'fast']}
-          />
-        </Group>
-        <Group justify="space-between">
-          <Text>Avatar Size</Text>
-          <SegmentedControl
-            size="xs"
-            value={settings.avatarSize}
-            onChange={value => update({ avatarSize: value })}
-            data={['small', 'medium', 'large']}
-          />
-        </Group>
-        <Group justify="space-between">
-          <Text>Captions</Text>
-          <Switch
-            checked={settings.captions}
-            onChange={event => update({ captions: event.currentTarget.checked })}
-            color="sbGold"
-          />
-        </Group>
-        <Group justify="space-between">
-          <Text>High Contrast</Text>
-          <Switch
-            checked={settings.highContrast}
-            onChange={event => update({ highContrast: event.currentTarget.checked })}
-          />
-        </Group>
-      </Stack>
-
-      <Card withBorder radius="lg">
-        <Group justify="space-between">
-          <Group gap={6}><Wifi size={16} /><Text size="sm">Offline Mode</Text></Group>
-          <Badge color="green" variant="light">Phrase packs cached</Badge>
-        </Group>
-      </Card>
-    </div>
-  )
+export default function SettingsScreen({ settings, onChange, onBack, onOpenHelp }) {
+  async function update(patch) { onChange(await saveSettings(patch)) }
+  const Toggle = ({ checked, onClick }) => <button onClick={onClick} className={`h-7 w-12 rounded-full p-1 transition-colors ${checked ? 'bg-primary' : 'bg-surface-container-high'}`}><span className={`block h-5 w-5 rounded-full bg-on-primary transition-transform ${checked ? 'translate-x-5' : ''}`} /></button>
+  return <div className="flex flex-col gap-space-md px-margin pb-space-lg pt-space-sm"><div className="flex items-center gap-space-xs"><button onClick={onBack}><Icon name="arrow_back" /></button><h1 className="text-2xl font-bold">Settings &amp; Accessibility</h1></div><p className="text-xs font-bold uppercase text-primary">Avatar &amp; Display</p><div className="flex flex-col gap-space-md rounded-xl bg-surface-container p-space-md"><div><div className="mb-1 flex justify-between text-sm"><span>Avatar Signing Speed</span><span className="text-primary">{settings.avatarSpeed}x</span></div><input type="range" min="0.5" max="2" step="0.1" value={settings.avatarSpeed} onChange={event => update({ avatarSpeed: parseFloat(event.target.value) })} className="w-full accent-primary" /></div><div className="flex items-center justify-between"><span className="text-sm">Avatar Size</span><div className="flex gap-1">{['small', 'medium', 'large'].map(size => <button key={size} onClick={() => update({ avatarSize: size })} className={`rounded-lg px-3 py-1.5 text-xs font-semibold capitalize ${settings.avatarSize === size ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface-variant'}`}>{size}</button>)}</div></div><div className="flex items-center justify-between"><span className="text-sm">Live Captions</span><Toggle checked={settings.captions} onClick={() => update({ captions: !settings.captions })} /></div><div className="flex items-center justify-between"><span className="text-sm">High Contrast</span><Toggle checked={settings.highContrast} onClick={() => update({ highContrast: !settings.highContrast })} /></div><div className="flex items-center justify-between"><span className="text-sm">Haptic Confirmation</span><Toggle checked={settings.haptics} onClick={() => update({ haptics: !settings.haptics })} /></div></div><p className="text-xs font-bold uppercase text-primary">Speech &amp; Acoustics</p><div className="flex flex-col gap-space-md rounded-xl bg-surface-container p-space-md"><div className="flex items-center justify-between"><span className="text-sm">Speech-to-Text (STT)</span><Toggle checked={settings.sttEnabled} onClick={() => update({ sttEnabled: !settings.sttEnabled })} /></div><div className="flex items-center justify-between"><span className="text-sm">Text-to-Speech (TTS)</span><Toggle checked={settings.ttsEnabled} onClick={() => update({ ttsEnabled: !settings.ttsEnabled })} /></div></div><p className="text-xs font-bold uppercase text-primary">Privacy &amp; Offline</p><div className="flex items-center justify-between rounded-xl bg-surface-container p-space-md"><div className="flex items-center gap-2"><Icon name="wifi_off" size={18} /><span className="text-sm">Offline-Only Mode</span></div><Toggle checked={settings.offlineOnly} onClick={() => update({ offlineOnly: !settings.offlineOnly })} /></div><button onClick={onOpenHelp} className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-surface-container-high font-semibold"><Icon name="support_agent" />Help &amp; Safety</button></div>
 }
