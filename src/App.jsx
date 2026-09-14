@@ -11,7 +11,9 @@ import CalibrationWizard from './components/CalibrationWizard'
 import SettingsScreen from './components/SettingsScreen'
 import OfflinePacks from './components/OfflinePacks'
 import HelpSafety from './components/HelpSafety'
+import DesktopNav from './components/DesktopNav'
 import Icon from './components/Icon'
+import { useIsDesktop } from './hooks/useMediaQuery'
 
 const NAV = [
   { id: 'bridge', label: 'Bridge', icon: 'record_voice_over' },
@@ -24,6 +26,7 @@ export default function App() {
   const [settings, setSettings] = useState(null)
   const [onboardStep, setOnboardStep] = useState('welcome')
   const [screen, setScreen] = useState('bridge')
+  const isDesktop = useIsDesktop()
 
   useEffect(() => {
     getSettings().then(value => {
@@ -35,28 +38,34 @@ export default function App() {
   if (!settings) return null
 
   if (onboardStep !== 'done') {
-    if (onboardStep === 'welcome') return <Welcome onNext={() => setOnboardStep('language')} onWatchDemo={() => setOnboardStep('language')} />
-    if (onboardStep === 'language') return <LanguageSelect onNext={async signLanguage => { const next = await saveSettings({ signLanguage }); setSettings(next); setOnboardStep('context') }} />
-    if (onboardStep === 'context') return <ContextSelect onNext={async contextDomains => { const next = await saveSettings({ contextDomains }); setSettings(next); setOnboardStep('tutorial') }} />
-    return <Tutorial onFinish={async () => { const next = await saveSettings({ onboarded: true }); setSettings(next); setOnboardStep('done') }} />
+    const wrap = node => <div className="flex min-h-screen items-center justify-center bg-background"><div className="w-full max-w-md">{node}</div></div>
+    if (onboardStep === 'welcome') return wrap(<Welcome onNext={() => setOnboardStep('language')} onWatchDemo={() => setOnboardStep('language')} />)
+    if (onboardStep === 'language') return wrap(<LanguageSelect onNext={async signLanguage => { const next = await saveSettings({ signLanguage }); setSettings(next); setOnboardStep('context') }} />)
+    if (onboardStep === 'context') return wrap(<ContextSelect onNext={async contextDomains => { const next = await saveSettings({ contextDomains }); setSettings(next); setOnboardStep('tutorial') }} />)
+    return wrap(<Tutorial onFinish={async () => { const next = await saveSettings({ onboarded: true }); setSettings(next); setOnboardStep('done') }} />)
+  }
+
+  const screens = {
+    bridge: <LiveBridge settings={settings} isDesktop={isDesktop} onOpenSettings={() => setScreen('settings')} onOpenOffline={() => setScreen('offline')} />,
+    library: <PhraseLibrary settings={settings} isDesktop={isDesktop} onSend={() => setScreen('bridge')} />,
+    group: <GroupMode isDesktop={isDesktop} />,
+    calibrate: <CalibrationWizard isDesktop={isDesktop} onDone={() => setScreen('bridge')} />,
+    settings: <SettingsScreen settings={settings} onChange={setSettings} onBack={() => setScreen('bridge')} onOpenHelp={() => setScreen('help')} />,
+    offline: <OfflinePacks isDesktop={isDesktop} onBack={() => setScreen('bridge')} />,
+    help: <HelpSafety isDesktop={isDesktop} onBack={() => setScreen('settings')} />,
   }
 
   return (
     <div className={`min-h-screen ${settings.highContrast ? 'contrast-125' : ''}`}>
-      <div className="pb-24">
-        {screen === 'bridge' && <LiveBridge settings={settings} onOpenSettings={() => setScreen('settings')} onOpenOffline={() => setScreen('offline')} />}
-        {screen === 'library' && <PhraseLibrary settings={settings} onSend={() => setScreen('bridge')} />}
-        {screen === 'group' && <GroupMode />}
-        {screen === 'calibrate' && <CalibrationWizard onDone={() => setScreen('bridge')} />}
-        {screen === 'settings' && <SettingsScreen settings={settings} onChange={setSettings} onBack={() => setScreen('bridge')} onOpenHelp={() => setScreen('help')} />}
-        {screen === 'offline' && <OfflinePacks onBack={() => setScreen('bridge')} />}
-        {screen === 'help' && <HelpSafety onBack={() => setScreen('settings')} />}
+      {isDesktop && <DesktopNav screen={screen} setScreen={setScreen} onOpenSettings={() => setScreen('settings')} />}
+      <div className={isDesktop ? 'mx-auto max-w-7xl px-space-lg py-space-lg' : 'pb-24'}>
+        {screens[screen]}
       </div>
-      <nav className="fixed bottom-0 z-50 w-full bg-surface-container/90 pb-safe backdrop-blur-xl">
+      {!isDesktop && <nav className="fixed bottom-0 z-50 w-full bg-surface-container/90 pb-safe backdrop-blur-xl">
         <div className="flex h-16 items-center justify-around px-margin">
           {NAV.map(item => <button key={item.id} onClick={() => setScreen(item.id)} className={`flex min-h-[48px] min-w-[56px] flex-col items-center justify-center ${screen === item.id ? 'font-bold text-primary' : 'text-on-surface-variant'}`}><Icon name={item.icon} size={24} /><span className="text-[11px]">{item.label}</span></button>)}
         </div>
-      </nav>
+      </nav>}
     </div>
   )
 }

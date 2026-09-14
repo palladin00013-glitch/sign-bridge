@@ -7,7 +7,7 @@ import { speak } from '../hooks/useTTS'
 import { useSTT } from '../hooks/useSTT'
 import SignVision from './SignVision'
 
-export default function LiveBridge({ settings, onOpenSettings, onOpenOffline }) {
+export default function LiveBridge({ settings, isDesktop, onOpenSettings, onOpenOffline }) {
   const [context, setContext] = useState(settings.contextDomains[0] || 'clinic')
   const [log, setLog] = useState([])
   const [input, setInput] = useState('')
@@ -49,7 +49,8 @@ export default function LiveBridge({ settings, onOpenSettings, onOpenOffline }) 
   const contextPhrases = phrases.filter(p => p.category === context || p.category === 'general').slice(0, 8)
 
   return (
-    <div className="flex w-full flex-col space-y-space-md px-margin pb-6 pt-space-sm">
+    <div className={isDesktop ? 'grid grid-cols-[1.1fr_0.9fr] items-start gap-space-lg' : 'flex w-full flex-col space-y-space-md px-margin pb-6 pt-space-sm'}>
+      <div className="flex flex-col gap-space-md">
       <div className="flex items-center justify-between gap-2">
         <button className="flex min-h-[48px] items-center gap-2 rounded-full bg-surface-container px-3 py-2" onClick={() => setContext(context === 'clinic' ? 'education' : context === 'education' ? 'casual' : 'clinic')}>
           <Icon name="medical_services" className="text-primary" fill size={20} />
@@ -72,6 +73,12 @@ export default function LiveBridge({ settings, onOpenSettings, onOpenOffline }) 
         <div className="flex flex-1 items-center justify-center"><SignVideoPlayer phrase={avatarPhrase} emotion={emotion} speed={avatarSpeed} size={settings.avatarSize} /></div>
         {captionsOn && avatarPhrase && <div className="relative z-10 w-full p-3"><div className="flex flex-col gap-2 rounded-xl bg-surface-container/95 p-3.5"><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-secondary" /><span className="text-[11px] font-bold uppercase tracking-wider text-secondary">Translating Voice → {settings.signLanguage}</span></div><p className="text-lg capitalize leading-snug text-on-surface">{avatarPhrase.id.replace('_', ' ')}</p></div></div>}
       </div>
+
+      </div>
+
+      </div>
+
+      <div className={activeTab === 'vision' ? 'hidden' : 'flex flex-col gap-space-md'}>
 
       <div className="flex w-full flex-col gap-3 rounded-2xl bg-surface-container p-3.5"><div className="flex items-center justify-between"><div className="flex items-center gap-2"><Icon name="chat_bubble_outline" className="text-primary" size={20} /><span className="font-semibold">Live Session Log</span><span className="rounded-full bg-surface-container-high px-2 py-0.5 text-[11px] text-on-surface-variant">{log.length} msgs</span></div><button onClick={() => setTranscriptOpen(open => !open)} className="flex items-center gap-1 text-xs text-on-surface-variant">{transcriptOpen ? 'Collapse' : 'Show'} <Icon name={transcriptOpen ? 'expand_less' : 'expand_more'} size={18} /></button></div>{transcriptOpen && <div className="flex max-h-56 flex-col gap-2.5 overflow-y-auto">{log.map((item, index) => <div key={index} className={`flex items-start gap-2.5 rounded-xl p-2.5 ${item.from === 'voice' ? 'bg-surface-container-low' : 'bg-surface-container-high'}`}><Icon name={item.from === 'voice' ? 'record_voice_over' : 'sign_language'} size={18} className={item.from === 'voice' ? 'text-primary' : 'text-secondary'} /><div className="min-w-0 flex-1"><div className="flex justify-between text-[11px]"><span className={`font-bold ${item.from === 'voice' ? 'text-primary' : 'text-secondary'}`}>{item.name}</span><span className="text-on-surface-variant">{item.ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div><p className="text-sm text-on-surface">{item.text}</p></div><button onClick={() => speak(item.text)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-container-high text-primary"><Icon name="volume_up" size={16} /></button></div>)}<div ref={bottomRef} /></div>}</div>
 
