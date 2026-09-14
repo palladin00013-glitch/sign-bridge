@@ -1,4 +1,5 @@
 import phrases from '../data/phrases.json'
+import { levenshtein } from './levenshtein'
 
 function normalize(s) {
   return s.toLowerCase().trim().replace(/[^\w\s]/g, '')
@@ -12,12 +13,19 @@ function similarity(a, b) {
   return overlap / Math.max(aTokens.size, bTokens.size)
 }
 
+function fuzzyScore(input, variant) {
+  const a = normalize(input)
+  const b = normalize(variant)
+  const dist = levenshtein(a, b)
+  return 1 - dist / Math.max(a.length, b.length, 1)
+}
+
 export function matchPhrase(input) {
   let best = null
   let bestScore = 0
   for (const phrase of phrases) {
     for (const variant of phrase.text) {
-      const score = normalize(input) === normalize(variant) ? 1 : similarity(input, variant)
+      const score = Math.max(similarity(input, variant), fuzzyScore(input, variant))
       if (score > bestScore) {
         bestScore = score
         best = phrase

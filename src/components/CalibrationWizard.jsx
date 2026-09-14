@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
+import { Button } from '@mantine/core'
 import { useHandLandmarks } from '../hooks/useHandLandmarks'
 import { landmarksToVector } from '../lib/signClassifier'
 import { saveExample } from '../lib/calibrationStore'
@@ -15,7 +16,7 @@ export default function CalibrationWizard({ onDone }) {
     lastVectorRef.current = landmarksToVector(landmarks)
   }, [])
 
-  useHandLandmarks(videoRef, onLandmarks)
+  const ready = useHandLandmarks(videoRef, onLandmarks)
 
   async function captureSample() {
     if (!lastVectorRef.current) return alert('No hand detected — hold the sign steady in frame.')
@@ -32,9 +33,10 @@ export default function CalibrationWizard({ onDone }) {
   return (
     <div>
       <video ref={videoRef} style={{ width: 320 }} muted playsInline />
+      {!ready && <p>Loading sign recognizer…</p>}
       <h3>Show the sign for: "{SIGNS[signIndex]}"</h3>
       <p>Sample {samplesTaken + 1} of 3</p>
-      <button onClick={captureSample}>Capture</button>
+      <Button onClick={captureSample}>Capture</Button>
     </div>
   )
 }

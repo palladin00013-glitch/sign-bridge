@@ -5,6 +5,7 @@ import '@mediapipe/camera_utils'
 const { Hands, Camera } = globalThis
 
 export function useHandLandmarks(videoRef, onLandmarks) {
+  const [ready, setReady] = useState(false)
   const handsRef = useRef(null)
 
   useEffect(() => {
@@ -14,6 +15,7 @@ export function useHandLandmarks(videoRef, onLandmarks) {
     })
     hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.6 })
     hands.onResults((results) => {
+      setReady(true)
       if (results.multiHandLandmarks?.[0]) onLandmarks(results.multiHandLandmarks[0])
     })
     handsRef.current = hands
@@ -27,4 +29,6 @@ export function useHandLandmarks(videoRef, onLandmarks) {
 
     return () => camera.stop()
   }, [videoRef, onLandmarks])
+
+  return ready
 }

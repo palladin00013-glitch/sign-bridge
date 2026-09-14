@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import '@mediapipe/holistic'
-import { landmarksToVector, classifySign } from '../lib/signClassifier'
+import { landmarksToVector, classifySignWithConfidence } from '../lib/signClassifier'
 
 const { Holistic } = globalThis
 
@@ -26,7 +26,7 @@ function usePersonTracker(videoRef, side, examples) {
     holistic.setOptions({ modelComplexity: 0, minDetectionConfidence: 0.5 })
     holistic.onResults((results) => {
       const hand = results.rightHandLandmarks || results.leftHandLandmarks
-      if (hand) setSign(classifySign(landmarksToVector(hand), examples))
+      if (hand) setSign(classifySignWithConfidence(landmarksToVector(hand), examples))
     })
     holisticRef.current = holistic
 

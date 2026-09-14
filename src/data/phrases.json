@@ -1,32 +1,21 @@
 [
-  {
-    "id": "hello",
-    "text": ["hello", "hi", "hey"],
-    "videos": { "neutral": "/videos/hello_neutral.mp4", "urgent": "/videos/hello_urgent.mp4" }
-  },
-  {
-    "id": "help",
-    "text": ["help", "help me", "i need help"],
-    "videos": { "neutral": "/videos/help_neutral.mp4", "urgent": "/videos/help_urgent.mp4" }
-  },
-  {
-    "id": "thank_you",
-    "text": ["thank you", "thanks"],
-    "videos": { "neutral": "/videos/thanks_neutral.mp4" }
-  },
-  {
-    "id": "yes",
-    "text": ["yes", "yeah", "yep"],
-    "videos": { "neutral": "/videos/yes_neutral.mp4" }
-  },
-  {
-    "id": "no",
-    "text": ["no", "nope"],
-    "videos": { "neutral": "/videos/no_neutral.mp4" }
-  },
-  {
-    "id": "emergency",
-    "text": ["emergency", "call 911", "call an ambulance"],
-    "videos": { "neutral": "/videos/emergency_neutral.mp4", "urgent": "/videos/emergency_urgent.mp4" }
-  }
+  { "id": "hello", "text": ["hello", "hi", "hey"], "videos": { "neutral": "/videos/hello_neutral.mp4", "urgent": "/videos/hello_urgent.mp4" } },
+  { "id": "help", "text": ["help", "help me", "i need help"], "videos": { "neutral": "/videos/help_neutral.mp4", "urgent": "/videos/help_urgent.mp4" } },
+  { "id": "thank_you", "text": ["thank you", "thanks"], "videos": { "neutral": "/videos/thanks_neutral.mp4" } },
+  { "id": "yes", "text": ["yes", "yeah", "yep"], "videos": { "neutral": "/videos/yes_neutral.mp4" } },
+  { "id": "no", "text": ["no", "nope"], "videos": { "neutral": "/videos/no_neutral.mp4" } },
+  { "id": "emergency", "text": ["emergency", "call 911", "call an ambulance"], "videos": { "neutral": "/videos/emergency_neutral.mp4", "urgent": "/videos/emergency_urgent.mp4" } },
+
+  { "id": "please", "text": ["please"], "videos": { "neutral": "/videos/please_neutral.mp4" } },
+  { "id": "sorry", "text": ["sorry", "i am sorry", "apologies"], "videos": { "neutral": "/videos/sorry_neutral.mp4" } },
+  { "id": "water", "text": ["water", "i need water", "thirsty"], "videos": { "neutral": "/videos/water_neutral.mp4" } },
+  { "id": "bathroom", "text": ["bathroom", "washroom", "toilet"], "videos": { "neutral": "/videos/bathroom_neutral.mp4" } },
+  { "id": "pain", "text": ["i am in pain", "it hurts", "pain"], "videos": { "neutral": "/videos/pain_neutral.mp4", "urgent": "/videos/pain_urgent.mp4" } },
+  { "id": "doctor", "text": ["doctor", "i need a doctor"], "videos": { "neutral": "/videos/doctor_neutral.mp4", "urgent": "/videos/doctor_urgent.mp4" } },
+  { "id": "police", "text": ["police", "call the police"], "videos": { "neutral": "/videos/police_neutral.mp4", "urgent": "/videos/police_urgent.mp4" } },
+  { "id": "stop", "text": ["stop"], "videos": { "neutral": "/videos/stop_neutral.mp4" } },
+  { "id": "wait", "text": ["wait", "wait a moment"], "videos": { "neutral": "/videos/wait_neutral.mp4" } },
+  { "id": "dont_understand", "text": ["i don't understand", "i do not understand", "confused"], "videos": { "neutral": "/videos/dont_understand_neutral.mp4" } },
+  { "id": "my_name_is", "text": ["my name is", "what is your name"], "videos": { "neutral": "/videos/my_name_is_neutral.mp4" } },
+  { "id": "hungry", "text": ["hungry", "i am hungry", "i need food"], "videos": { "neutral": "/videos/hungry_neutral.mp4" } }
 ]

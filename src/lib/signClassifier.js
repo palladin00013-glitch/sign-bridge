@@ -12,11 +12,19 @@ function distance(a, b) {
 
 // examples: [{ label: 'hello', vector: [...] }, ...]  (2-3 per sign from calibration)
 export function classifySign(vector, examples, threshold = 0.35) {
+  return classifySignWithConfidence(vector, examples, threshold).label
+}
+
+export function classifySignWithConfidence(vector, examples, threshold = 0.35) {
   let best = null
   let bestDist = Infinity
   for (const ex of examples) {
     const d = distance(vector, ex.vector)
     if (d < bestDist) { bestDist = d; best = ex.label }
   }
-  return bestDist <= threshold ? best : null
+  const confidence = Math.max(0, 1 - bestDist / threshold)
+  return {
+    label: bestDist <= threshold ? best : null,
+    confidence: Math.min(confidence, 1),
+  }
 }
