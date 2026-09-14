@@ -1,0 +1,32 @@
+[
+  {
+    "id": "hello",
+    "text": ["hello", "hi", "hey"],
+    "videos": { "neutral": "/videos/hello_neutral.mp4", "urgent": "/videos/hello_urgent.mp4" }
+  },
+  {
+    "id": "help",
+    "text": ["help", "help me", "i need help"],
+    "videos": { "neutral": "/videos/help_neutral.mp4", "urgent": "/videos/help_urgent.mp4" }
+  },
+  {
+    "id": "thank_you",
+    "text": ["thank you", "thanks"],
+    "videos": { "neutral": "/videos/thanks_neutral.mp4" }
+  },
+  {
+    "id": "yes",
+    "text": ["yes", "yeah", "yep"],
+    "videos": { "neutral": "/videos/yes_neutral.mp4" }
+  },
+  {
+    "id": "no",
+    "text": ["no", "nope"],
+    "videos": { "neutral": "/videos/no_neutral.mp4" }
+  },
+  {
+    "id": "emergency",
+    "text": ["emergency", "call 911", "call an ambulance"],
+    "videos": { "neutral": "/videos/emergency_neutral.mp4", "urgent": "/videos/emergency_urgent.mp4" }
+  }
+]
